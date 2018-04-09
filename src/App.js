@@ -1,5 +1,6 @@
 import React from "react";
-import { Provider, Client, Connect, query } from "urql";
+import { Provider, Client } from "urql";
+import Home from "./Home";
 
 const getClient = token =>
   new Client({
@@ -11,17 +12,6 @@ const getClient = token =>
     }
   });
 
-const TodoQuery = `
-  query { viewer { login } }
-`;
-
-const Home = () => (
-  <Connect query={query(TodoQuery)}>
-    {({ loaded, fetching, refetch, data, error, addTodo }) => {
-      return loaded ? <div>${JSON.stringify(data)}</div> : "loading...";
-    }}
-  </Connect>
-);
 export const App = ({ token }) => (
   <Provider client={getClient(token)}>
     <Home />
