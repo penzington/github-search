@@ -7,10 +7,13 @@
     "react-dom": "^16.3.1"
   },
   "scripts": {
+    "precommit": "lint-staged",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "lint": "eslint --fix src",
+    "lint:bail": "eslint src",
+    "test:staged": "CI=true yarn test --findRelatedTests"
   },
   "eslintConfig": {
     "extends": [
@@ -26,6 +29,12 @@
         "error"
       ]
     }
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "lint:bail",
+      "yarn test:staged"
+    ]
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
