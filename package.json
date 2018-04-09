@@ -33,7 +33,7 @@
   },
   "lint-staged": {
     "src/**/*.js": [
-      "lint:bail",
+      "yarn lint:bail",
       "yarn test:staged"
     ]
   },
