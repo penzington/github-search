@@ -1,6 +1,7 @@
 import React from "react";
 import { Provider, Client } from "urql";
 import Home from "./Home";
+import Search from "./Search";
 
 const getClient = token =>
   new Client({
@@ -15,6 +16,7 @@ const getClient = token =>
 export const App = ({ token }) => (
   <Provider client={getClient(token)}>
     <Home />
+    <Search />
   </Provider>
 );
 
