@@ -1,5 +1,6 @@
 import React from "react";
 import { Connect, query } from "urql";
+import throttle from "lodash.throttle";
 
 const SearchQuery = `
 query($name: String!) {
@@ -20,21 +21,27 @@ query($name: String!) {
 const SearchResult = ({ name }) => <div>{name}</div>;
 
 const SearchContainer = class extends React.Component {
+  constructor() {
+    super();
+    this.updateSearchQuery = throttle(this.updateSearchQuery, 500);
+  }
+
   state = {
     searchQuery: ""
   };
 
-  onSearchType = e => {
-    this.setState({ searchQuery: e.target.value });
-  };
+  updateSearchQuery = searchQuery => this.setState({ searchQuery });
 
   render() {
     return (
       <div>
-        <input type="search" onChange={this.onSearchType} />
+        <input
+          type="search"
+          onChange={e => this.updateSearchQuery(e.target.value)}
+        />
         <Connect
           query={query(SearchQuery, {
-            name: `fullname:${this.state.searchQuery}`
+            name: this.state.searchQuery
           })}
         >
           {({ loaded, data, error }) => {
