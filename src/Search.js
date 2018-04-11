@@ -1,5 +1,6 @@
 import React from "react";
 import { Connect, query } from "urql";
+import { Link } from "react-router-dom";
 import throttle from "lodash.throttle";
 
 const SearchQuery = `
@@ -10,6 +11,7 @@ query($name: String!) {
       node {
         ... on User {
           name
+          login
           id
         }
       }
@@ -18,7 +20,9 @@ query($name: String!) {
 }
 `;
 
-const SearchResult = ({ name }) => <div>{name}</div>;
+const SearchResult = ({ name, login }) => (
+  <Link to={`profiles/${login}`}>{name}</Link>
+);
 
 const SearchContainer = class extends React.Component {
   constructor() {
