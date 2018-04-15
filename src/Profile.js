@@ -2,27 +2,17 @@ import React from "react";
 import { withRouter, Redirect } from "react-router-dom";
 import media from "styled-media-query";
 import { Connect, query } from "urql";
-import { format } from "date-fns/esm";
+import { format } from "date-fns";
 import styled, { css } from "styled-components";
-import normalizeUrl from "normalize-url";
-import humanizeUrl from "humanize-url";
 import placeholderAvatarUrl from "./avatar.png";
 import { GitHubLogo, Back } from "./components/Icons";
 
-const safelyNormalizeUrl = url => {
-  try {
-    return normalizeUrl(url);
-  } catch (error) {
-    return null;
+function normalizeUrl(url) {
+  if (!/^(?:f|ht)tps?:\/\//.test(url)) {
+    url = "http://" + url;
   }
-};
-const safelyHumanizeUrl = url => {
-  try {
-    return humanizeUrl(url);
-  } catch (error) {
-    return null;
-  }
-};
+  return url;
+}
 
 const ProfileContainer = styled.div``;
 const ProfileDetails = styled.div`
@@ -150,16 +140,17 @@ const Profile = ({
             </LoadableText>
           )}
           <br />
-          {websiteUrl && (
-            <LoadableLink
-              target="_blank"
-              rel="noopener noreferrer"
-              href={safelyNormalizeUrl(websiteUrl)}
-              loaded={loaded}
-            >
-              {safelyHumanizeUrl(websiteUrl)}
-            </LoadableLink>
-          )}
+          {websiteUrl &&
+            websiteUrl.trim() && (
+              <LoadableLink
+                target="_blank"
+                rel="noopener noreferrer"
+                href={normalizeUrl(websiteUrl)}
+                loaded={loaded}
+              >
+                {websiteUrl}
+              </LoadableLink>
+            )}
         </UserInfo>
       </ProfileDetailsInfo>
     </ProfileDetails>
