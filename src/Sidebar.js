@@ -1,12 +1,12 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import media from "styled-media-query";
 import { Link, withRouter } from "react-router-dom";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
 import { GitHubLogo } from "./components/Icons";
 import { Connect, query } from "urql";
 import placeholderAvatarUrl from "./avatar.png";
-import { media } from "./theme";
 
 const Avatar = styled.img`
   width: 8em;
@@ -15,7 +15,7 @@ const Avatar = styled.img`
   transition: opacity 250ms ease-out;
   transition-delay: 200ms;
   opacity: ${props => (props.loaded ? 1 : 0.3)};
-  ${media.smallOnly`
+  ${media.lessThan("small")`
     margin-right: 1em;
   `};
 `;
@@ -39,7 +39,7 @@ const CurrentUser = styled.div`
   text-align: center;
   padding: 2em 1em;
   color: ${props => props.theme.colors.secondaryBackground};
-  ${media.smallOnly`
+  ${media.lessThan("small")`
     display: flex;
     justify-content: center;
     align-items: center;

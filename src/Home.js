@@ -1,11 +1,11 @@
 import React from "react";
+import media from "styled-media-query";
 import { Route, Switch, Redirect } from "react-router-dom";
 import styled from "styled-components";
 import Sidebar from "./Sidebar";
 import Search from "./Search";
 import Profile from "./Profile";
 import Page404 from "./404";
-import { media } from "./theme";
 
 const Layout = styled.div`
   font-size: 0.9em;
@@ -15,12 +15,14 @@ const Layout = styled.div`
   grid-template-rows: 1fr auto;
   grid-template-columns: 1fr 4fr;
   grid-template-areas:
-    "😀 🔎"
-    "😀 👞";
-  ${media.tall`
+    "🍫 🔎"
+    "🍫 👞";
+
+  @media (min-height: 900px) {
     font-size: 1em;
-  `};
-  ${media.smallOnly`
+  }
+
+  ${media.lessThan("medium")`
     display: block;
     font-size: 0.8em;
   `};
@@ -48,7 +50,7 @@ const SearchResults = styled(LayoutElement)`
 
 const Home = () => (
   <Layout>
-    <LayoutElement slot="😀">
+    <LayoutElement slot="🍫">
       <Sidebar />
     </LayoutElement>
     <SearchResults slot="🔎">

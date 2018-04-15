@@ -1,5 +1,6 @@
 import React from "react";
 import { withRouter, Redirect } from "react-router-dom";
+import media from "styled-media-query";
 import { Connect, query } from "urql";
 import { format } from "date-fns/esm";
 import styled, { css } from "styled-components";
@@ -7,7 +8,6 @@ import normalizeUrl from "normalize-url";
 import humanizeUrl from "humanize-url";
 import placeholderAvatarUrl from "./avatar.png";
 import { GitHubLogo, Back } from "./components/Icons";
-import { media } from "./theme";
 
 const safelyNormalizeUrl = url => {
   try {
@@ -29,7 +29,7 @@ const ProfileDetails = styled.div`
   background: ${props => props.theme.colors.secondaryBackground};
   padding: 2em;
   padding-top: 0;
-  ${media.large`
+  ${media.greaterThan("large")`
     display: flex;
   `};
 `;
