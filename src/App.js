@@ -1,14 +1,15 @@
 import React from "react";
 import { Provider, Client } from "urql";
+import { ThemeProvider } from "styled-components";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect
 } from "react-router-dom";
+import theme from "./theme";
 import Home from "./Home";
 import Login from "./Login";
-import Profile from "./Profile";
 
 const getClient = token =>
   new Client({
@@ -31,18 +32,15 @@ const ProtectedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
 
 export const App = ({ token }) => (
   <Provider client={getClient(token)}>
-    <Router>
-      <Switch>
-        <ProtectedRoute exact path="/" isLoggedIn={!!token} component={Home} />
-        <ProtectedRoute
-          path={`/profiles/:login`}
-          isLoggedIn={!!token}
-          component={Profile}
-        />
-        <Route path="/login" component={Login} />
-        <Route component={() => "404 :("} />
-      </Switch>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Switch>
+          <Route path="/login" component={Login} />
+          <ProtectedRoute path="/" isLoggedIn={!!token} component={Home} />
+          <Redirect to="/login" />
+        </Switch>
+      </Router>
+    </ThemeProvider>
   </Provider>
 );
 

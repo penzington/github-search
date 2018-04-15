@@ -1,15 +1,18 @@
 import React from "react";
 import styled from "styled-components";
+import { GitHubLogo } from "./components/Icons";
 
-const SEARCH_COLOR = `#2196f3`;
-
-function getAutofillText(result = "", inputValue = "") {
+function getAutofillText(result = {}, inputValue = "") {
   const normalizedInputValue = inputValue.trim().toLowerCase();
-  if (!normalizedInputValue) {
-    return ["", "Type to search..."];
+  if (!normalizedInputValue && !result) {
+    return ["Type to ", "search..."];
   }
   if (!result) {
     return ["", ""];
+  }
+  if (!normalizedInputValue && result.name) {
+    const parts = result.name.split(" ");
+    return [parts[0] + " ", parts.slice(1).join(" ")];
   }
   const name = result.name || "";
   const login = result.login || "";
@@ -37,30 +40,42 @@ const SearchInputWrapper = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
 const SearchInputAutofill = styled.div`
   display: inline-block;
   position: absolute;
   font-size: 3em;
   font-weight: bold;
+  white-space: pre;
   color: #ccc;
-  white-space: nowrap;
   left: ${props => (props.isAfter ? "100%" : undefined)};
   right: ${props => (props.isBefore ? "100%" : undefined)};
 `;
+
 const SearchInputContainer = styled.div`
   display: inline-flex;
   position: relative;
 `;
+
 const SearchResultAlt = styled.div`
   font-size: 2em;
   font-weight: bold;
-  color: #ccc;
+  color: ${props => props.theme.colors.mutedTextColor};
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 0.5em;
 `;
+
 const SearchResultWrapper = styled.div`
   display: block;
-  margin-bottom: 2em;
   font-size: ${props => (props.small ? "0.8em" : "1em")};
+  padding: ${props => (props.small ? "1em" : "0")};
+  &:hover {
+    background: ${props => props.theme.colors.secondaryBackground};
+  }
 `;
 
 export const SearchResultInput = styled.div`
@@ -68,7 +83,7 @@ export const SearchResultInput = styled.div`
   font-size: 3em;
   font-weight: bold;
   outline: 0;
-  color: ${SEARCH_COLOR};
+  color: ${props => props.theme.colors.lightBlue};
 
   @keyframes flash {
     from,
@@ -81,13 +96,15 @@ export const SearchResultInput = styled.div`
       opacity: 0;
     }
   }
-
+  &::selection {
+    background: #f6ff6d;
+  }
   &:empty:focus::after {
     content: " ";
     position: absolute;
     right: 2px;
     height: 100%;
-    border-right: 5px solid ${SEARCH_COLOR};
+    border-right: 5px solid ${props => props.theme.colors.lightBlue};
     animation-duration: 2s;
     animation-fill-mode: both;
     animation-name: flash;
@@ -98,23 +115,35 @@ export const SearchResultInput = styled.div`
   }
 `;
 
-const SearchResult = ({ result, inputValue, children, ...rest }) => {
+const SearchResult = ({
+  result,
+  inputValue,
+  children,
+  showDetails,
+  ...rest
+}) => {
   const [beforeText, afterText] = getAutofillText(result, inputValue);
   return (
     <SearchResultWrapper {...rest}>
       <SearchInputWrapper>
         <SearchInputContainer>
-          <SearchInputAutofill isBefore>{beforeText}</SearchInputAutofill>
+          <SearchInputAutofill isBefore>
+            {beforeText.replace(/ /g, "\u00a0")}
+          </SearchInputAutofill>
           {children}
-          <SearchInputAutofill isAfter>{afterText}</SearchInputAutofill>
+          <SearchInputAutofill isAfter>
+            {afterText.replace(/ /g, "\u00a0")}
+          </SearchInputAutofill>
         </SearchInputContainer>
       </SearchInputWrapper>
-      {result && (
-        <SearchResultAlt>
-          <code>github.com/{result.login}</code>{" "}
-          {result.name ? `· ${result.name}` : ""}
-        </SearchResultAlt>
-      )}
+      {result &&
+        showDetails && (
+          <SearchResultAlt>
+            <GitHubLogo width="24" height="24" />
+            <code>/{result.login}</code>{" "}
+            {result.name ? `\u00a0· ${result.name}` : ""}
+          </SearchResultAlt>
+        )}
     </SearchResultWrapper>
   );
 };

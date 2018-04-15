@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "date-fns": "^2.0.0-alpha.7",
+    "humanize-url": "^1.0.1",
     "lodash.throttle": "^4.1.1",
+    "normalize-url": "^2.0.1",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-router-dom": "^4.2.2",
     "styled-components": "^3.2.5",
+    "styled-media-queries": "^1.0.1",
     "urql": "^0.2.1"
   },
   "scripts": {
