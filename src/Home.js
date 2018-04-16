@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar";
 import Search from "./Search";
 import Profile from "./Profile";
 import Page404 from "./404";
+import ScrollToTop from "./ScrollToTop";
 
 const Layout = styled.div`
   font-size: 0.9em;
@@ -60,6 +61,7 @@ const Home = () => (
         <Route path={`/search/:searchQuery?`} component={Search} />
         <Route component={Page404} />
       </Switch>
+      <ScrollToTop />
     </SearchResults>
     <Footer slot="👞">
       <a href="http://peka.la">2018 Maciej Pękala</a>

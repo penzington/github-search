@@ -1,5 +1,3 @@
-import { SearchQuery } from "./Search";
-
 function fetchIntercept(ghAccessToken) {
   let originalFetch = window.fetch;
   window.fetch = (...args) =>
