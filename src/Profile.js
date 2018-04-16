@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import styled, { css } from "styled-components";
 import placeholderAvatarUrl from "./avatar.png";
 import { GitHubLogo, Back } from "./components/Icons";
+import ReactionsGraph from "./ReactionsGraph";
 
 function normalizeUrl(url) {
   if (!/^(?:f|ht)tps?:\/\//.test(url)) {
@@ -14,12 +15,16 @@ function normalizeUrl(url) {
   return url;
 }
 
-const ProfileContainer = styled.div``;
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+`;
 const ProfileDetails = styled.div`
   background: ${props => props.theme.colors.secondaryBackground};
   padding: 2em;
   padding-top: 0;
-  ${media.greaterThan("large")`
+  ${media.greaterThan("medium")`
     display: flex;
   `};
 `;
@@ -51,9 +56,15 @@ const UserInfo = styled.div`
   margin-top: 1em;
 `;
 
+const GraphsContainer = styled.div`
+  margin-top: 1em;
+  flex: 1;
+`;
+
 const BackLinkContainer = styled.div`
   background: ${props => props.theme.colors.secondaryBackground};
 `;
+
 const BackLink = styled.button`
   background: none;
   color: ${props => props.theme.colors.mutedTextColor};
@@ -85,17 +96,8 @@ const LoadableCode = LoadableText.withComponent("code");
 const LoadableLink = LoadableText.withComponent("a");
 
 const Profile = ({
-  user: {
-    name,
-    login,
-    location,
-    url,
-    company,
-    bio,
-    avatarUrl,
-    createdAt,
-    websiteUrl
-  },
+  user: { name, location, url, company, bio, avatarUrl, createdAt, websiteUrl },
+  login,
   loaded,
   onBackToSearch
 }) => (
@@ -154,6 +156,9 @@ const Profile = ({
         </UserInfo>
       </ProfileDetailsInfo>
     </ProfileDetails>
+    <GraphsContainer>
+      <ReactionsGraph login={login} />
+    </GraphsContainer>
   </ProfileContainer>
 );
 
@@ -165,7 +170,6 @@ const ProfileQuery = `
       company
       createdAt
       location
-      login
       name
       url
       websiteUrl
@@ -188,7 +192,6 @@ const loadingUser = {
 
 const ProfileSmartContainer = class extends React.Component {
   onBackToSearch = () => {
-    console.log(this.props.history);
     if (this.props.history.length > 0) {
       this.props.history.goBack();
     } else {
@@ -196,21 +199,19 @@ const ProfileSmartContainer = class extends React.Component {
     }
   };
   render() {
+    const login = this.props.match.params.login;
     return (
-      <Connect
-        query={query(ProfileQuery, { login: this.props.match.params.login })}
-      >
+      <Connect query={query(ProfileQuery, { login })}>
         {({ loaded, data, error }) =>
           error || (loaded && !data.user) ? (
             <Redirect to="/404" />
           ) : (
-            console.log(data) || (
-              <Profile
-                user={loaded ? data.user : loadingUser}
-                loaded={loaded}
-                onBackToSearch={this.onBackToSearch}
-              />
-            )
+            <Profile
+              user={loaded ? data.user : loadingUser}
+              login={login}
+              loaded={loaded}
+              onBackToSearch={this.onBackToSearch}
+            />
           )
         }
       </Connect>
