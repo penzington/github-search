@@ -201,7 +201,7 @@ const ProfileSmartContainer = class extends React.Component {
   render() {
     const login = this.props.match.params.login;
     return (
-      <Connect query={query(ProfileQuery, { login })}>
+      <Connect query={query(ProfileQuery, { login, queryType: "profile" })}>
         {({ loaded, data, error }) =>
           error || (loaded && !data.user) ? (
             <Redirect to="/404" />

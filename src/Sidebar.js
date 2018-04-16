@@ -7,6 +7,7 @@ import Logo from "./components/Logo";
 import { GitHubLogo } from "./components/Icons";
 import { Connect, query } from "urql";
 import placeholderAvatarUrl from "./avatar.png";
+import { logout } from "./auth";
 
 const Avatar = styled.img`
   width: 8em;
@@ -120,13 +121,13 @@ const loadingUser = {
 
 const SidebarContainer = class extends React.Component {
   logout = () => {
-    localStorage.setItem("access_token", "");
+    logout();
     this.props.history.push("/login");
   };
 
   render() {
     return (
-      <Connect query={query(ViewerQuery)}>
+      <Connect query={query(ViewerQuery, { queryType: "viewer" })}>
         {({ loaded, data }) => (
           <Sidebar
             user={loaded ? data.viewer : loadingUser}

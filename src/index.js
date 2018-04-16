@@ -2,15 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
+import fetchIntercept from "./fetch-intercept";
+import { getAccessTokenFromURL } from "./auth";
 
-const queryParams = new URLSearchParams(document.location.search);
-let ghAccessToken;
-if (queryParams.get("access_token")) {
-  ghAccessToken = queryParams.get("access_token");
-  localStorage.setItem("access_token", ghAccessToken);
-  window.history.pushState(null, "", document.location.href.split("?")[0]);
-} else {
-  ghAccessToken = localStorage.getItem("access_token");
-}
-
-ReactDOM.render(<App token={ghAccessToken} />, document.getElementById("root"));
+const accessToken = getAccessTokenFromURL();
+fetchIntercept(accessToken);
+ReactDOM.render(<App token={accessToken} />, document.getElementById("root"));

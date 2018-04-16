@@ -187,7 +187,11 @@ const ReactionsGraphSmartContainer = class extends React.Component {
 
     return (
       <Connect
-        query={query(ReactionsQuery, { login, cursor: this.state.cursors[0] })}
+        query={query(ReactionsQuery, {
+          login,
+          cursor: this.state.cursors[0],
+          queryType: "reactions"
+        })}
       >
         {({ loaded, fetching, data, error }) => {
           const issues = loaded ? data.user.issues.edges : [];

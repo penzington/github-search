@@ -266,7 +266,8 @@ const SearchSmartContainer = class extends React.Component {
       <Connect
         query={query(SearchQuery, {
           queryValue: this.getQueryValue(),
-          cursor: this.state.cursors[0]
+          cursor: this.state.cursors[0],
+          queryType: "search"
         })}
       >
         {({ loaded, fetching, data, error }) => (
