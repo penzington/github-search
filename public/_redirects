@@ -1,2 +1,2 @@
-/api/*      https://whocandomycodereview.now.sh     200
-/*          /index.html                             200
+/api/*      https://whocandomycodereview.now.sh/:splat     200
+/*          /index.html                                    200
