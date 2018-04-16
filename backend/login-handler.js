@@ -1,3 +1,4 @@
+// code adapted from https://github.com/mxstbr/micro-github
 require("dotenv").config();
 const querystring = require("querystring");
 const axios = require("axios");
