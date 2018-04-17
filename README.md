@@ -3,6 +3,41 @@
 
 **See it live! [whocandomycode.review](https://whocandomycode.review)**
 
+## Content
+<!-- toc -->
+
+- [Architecture](#architecture)
+  * [Auth flow](#auth-flow)
+  * [GitHub API usage](#github-api-usage)
+  * [Usage stats](#usage-stats)
+    + [Notes](#notes)
+- [App requirements](#app-requirements)
+- [Backend - frontend communication](#backend---frontend-communication)
+- [Development](#development)
+  * [Running the app](#running-the-app)
+    + [Prepare](#prepare)
+    + [Quick start](#quick-start)
+    + [Less quick start](#less-quick-start)
+    + [I don't want to install node!](#i-dont-want-to-install-node)
+  * [Technologies](#technologies)
+    + [Frontend](#frontend)
+    + [Backend](#backend)
+  * [Project structure](#project-structure)
+    + [Frontend](#frontend-1)
+  * [Backend](#backend-1)
+  * [Tests](#tests)
+- [Deployment](#deployment)
+  * [Backend](#backend-2)
+  * [Frontend](#frontend-2)
+- [Technology considerations](#technology-considerations)
+  * [Proxying GitHub requests through the backend.](#proxying-github-requests-through-the-backend)
+  * [Using types (e.g. flowtype)](#using-types-eg-flowtype)
+  * [GitHub GraphQL API vs Rest API](#github-graphql-api-vs-rest-api)
+  * [Auth using OAuth](#auth-using-oauth)
+  * [Styling with Styled Components](#styling-with-styled-components)
+
+<!-- tocstop -->
+
 # Architecture
 The app consists of a fully static SPA frontend and a backend service used for oAuth authentication with GitHub as well as logging and serving of usage stats.
 
