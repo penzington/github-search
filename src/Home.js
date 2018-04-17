@@ -45,9 +45,7 @@ const Footer = styled(LayoutElement.withComponent("footer"))`
   }
 `;
 
-const SearchResults = styled(LayoutElement)`
-  overflow: hidden;
-`;
+const SearchResults = styled(LayoutElement)``;
 
 const Home = () => (
   <Layout>

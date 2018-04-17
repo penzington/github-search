@@ -1,67 +1,5 @@
 import React from "react";
-import styled from "styled-components";
-import media from "styled-media-query";
-import { Connect, query } from "urql";
-import Button from "./components/Button";
-
-const Graph = styled.div`
-  padding: 1rem;
-  ${media.greaterThan("medium")`
-    width: 50%;
-  `};
-`;
-
-const GraphBars = styled.div`
-  padding-top: 3rem;
-  height: 300px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
-`;
-
-const GraphTitle = styled.div`
-  margin: 0;
-  font-size: 1.4em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const GraphPaginationActions = styled.div`
-  margin-top: 3rem;
-  padding: 1rem 0;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const GraphBar = styled.div`
-  width: ${props => 100 / props.barCount}%;
-  height: ${props => props.value / props.maxValue * 100}%;
-  min-height: 1px;
-  position: relative;
-  background: ${props => (props.loaded ? props.color : "transparent")};
-  transition: background 250ms ease-in;
-  & + * {
-    margin-left: 1.5em;
-  }
-  &::after {
-    content: "${props => props.emoji}";
-    position: absolute;
-    top: calc(100% + 10px); 
-    right: 50%;
-    font-size: 2em;
-    transform: translateX(50%);
-  }
-  &::before {
-    color: ${props => (props.loaded ? props.color : "transparent")};
-    content: "${props => props.value}";
-    position: absolute;
-    bottom: calc(100% + 2px); 
-    right: 50%;
-    font-size: 1.2em;
-    transform: translateX(50%);
-  }
-`;
+import IssueDataGraph from "./IssueDataGraph";
 
 const getEmojiStats = issues =>
   issues
@@ -99,62 +37,6 @@ const reactions = {
   HEART: ["#00c6fb", "❤️"]
 };
 
-const paginationButtonTheme = {
-  colors: {
-    buttonBg: "#eee",
-    buttonBgHover: "transparent",
-    buttonColorHover: "#999",
-    buttonColor: "#999"
-  }
-};
-
-const ReactionsGraph = class extends React.Component {
-  render() {
-    const [chartData, maxValue] = getChartData(this.props.issues);
-    return (
-      <Graph>
-        <GraphTitle>
-          <span>Reactions to Issues</span>{" "}
-          {this.props.fetching && <small>Loading...</small>}
-        </GraphTitle>
-        <GraphBars>
-          {chartData.map(reaction => (
-            <GraphBar
-              loaded={this.props.loaded}
-              key={reaction.name}
-              barCount={chartData.length}
-              maxValue={maxValue}
-              {...reaction}
-            />
-          ))}
-        </GraphBars>
-        <GraphPaginationActions>
-          {this.props.hasNext && (
-            <Button
-              small
-              disabled={this.props.fetching}
-              onClick={this.props.onLoadNextPage}
-              theme={paginationButtonTheme}
-            >
-              Older issues
-            </Button>
-          )}
-          {this.props.hasPrevious && (
-            <Button
-              small
-              disabled={this.props.fetching}
-              onClick={this.props.onLoadPreviousPage}
-              theme={paginationButtonTheme}
-            >
-              Newer issues
-            </Button>
-          )}
-        </GraphPaginationActions>
-      </Graph>
-    );
-  }
-};
-
 const PAGE_SIZE = 100;
 const ReactionsQuery = `
   query($login: String!, $cursor: String) {
@@ -179,49 +61,14 @@ const ReactionsQuery = `
   }
 `;
 
-const ReactionsGraphSmartContainer = class extends React.Component {
-  state = {
-    cursors: []
-  };
-
-  loadNextPage = cursor => {
-    this.setState({ cursors: [cursor, ...this.state.cursors] });
-  };
-
-  loadPreviousPage = () => {
-    this.setState({ cursors: this.state.cursors.slice(1) });
-  };
-
-  render() {
-    const { login } = this.props;
-
-    return (
-      <Connect
-        query={query(ReactionsQuery, {
-          login,
-          cursor: this.state.cursors[0],
-          queryType: "reactions"
-        })}
-      >
-        {({ loaded, fetching, data, error }) => {
-          const issues = loaded ? data.user.issues.edges : [];
-          return (
-            <ReactionsGraph
-              issues={issues}
-              loaded={loaded}
-              fetching={fetching}
-              hasNext={issues.length === PAGE_SIZE}
-              hasPrevious={!!this.state.cursors.length}
-              onLoadNextPage={this.loadNextPage.bind(
-                this,
-                !!issues.length ? issues[issues.length - 1].cursor : ""
-              )}
-              onLoadPreviousPage={this.loadPreviousPage}
-            />
-          );
-        }}
-      </Connect>
-    );
-  }
-};
-export default ReactionsGraphSmartContainer;
+export default ({ login }) => (
+  <IssueDataGraph
+    query={ReactionsQuery}
+    login={login}
+    queryType="reactions"
+    getChartData={getChartData}
+    title="Reactions to Issues"
+    explanation={`Reactions to issues opened by ${login}, per ${PAGE_SIZE} issues`}
+    pageSize={PAGE_SIZE}
+  />
+);

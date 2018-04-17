@@ -7,6 +7,7 @@ import styled, { css } from "styled-components";
 import placeholderAvatarUrl from "./assets/avatar.png";
 import { GitHubLogo, Back } from "./components/Icons";
 import ReactionsGraph from "./ReactionsGraph";
+import TopCollaboratorsGraph from "./TopCollaboratorsGraph";
 
 function normalizeUrl(url) {
   if (!/^(?:f|ht)tps?:\/\//.test(url)) {
@@ -59,6 +60,9 @@ const UserInfo = styled.div`
 const GraphsContainer = styled.div`
   margin-top: 1em;
   flex: 1;
+  ${media.greaterThan("large")`
+    display: flex;
+  `};
 `;
 
 const BackLinkContainer = styled.div`
@@ -158,6 +162,7 @@ const Profile = ({
     </ProfileDetails>
     <GraphsContainer>
       <ReactionsGraph login={login} />
+      <TopCollaboratorsGraph login={login} />
     </GraphsContainer>
   </ProfileContainer>
 );
