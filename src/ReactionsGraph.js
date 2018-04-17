@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import media from "styled-media-query";
 import { Connect, query } from "urql";
+import Button from "./components/Button";
 
 const Graph = styled.div`
   padding: 1rem;
@@ -31,14 +32,6 @@ const GraphPaginationActions = styled.div`
   padding: 1rem 0;
   display: flex;
   justify-content: space-between;
-`;
-const GraphPaginationAction = styled.button`
-  border: 0;
-  background: ${props => props.theme.colors.secondaryBackground};
-  font-size: inherit;
-  font-family: inherit;
-  color: inherit;
-  padding: 0.5rem 1rem;
 `;
 
 const GraphBar = styled.div`
@@ -82,6 +75,21 @@ const getEmojiStats = issues =>
       };
     }, {});
 
+export const getChartData = issues => {
+  const emojiStats = getEmojiStats(issues);
+  const chartData = Object.keys(reactions).map(reaction => ({
+    name: reaction,
+    emoji: reactions[reaction][1],
+    color: reactions[reaction][0],
+    value: emojiStats[reaction] || 0
+  }));
+  const maxValue = chartData.reduce(
+    (value, reaction) => (reaction.value > value ? reaction.value : value),
+    0
+  );
+  return [chartData, maxValue];
+};
+
 const reactions = {
   THUMBS_UP: ["#43A19E", "👍"],
   THUMBS_DOWN: ["#7B43A1", "👎"],
@@ -91,19 +99,18 @@ const reactions = {
   HEART: ["#00c6fb", "❤️"]
 };
 
+const paginationButtonTheme = {
+  colors: {
+    buttonBg: "#eee",
+    buttonBgHover: "transparent",
+    buttonColorHover: "#999",
+    buttonColor: "#999"
+  }
+};
+
 const ReactionsGraph = class extends React.Component {
   render() {
-    const emojiStats = getEmojiStats(this.props.issues);
-    const chartData = Object.keys(reactions).map(reaction => ({
-      name: reaction,
-      emoji: reactions[reaction][1],
-      color: reactions[reaction][0],
-      value: emojiStats[reaction] || 0
-    }));
-    const maxValue = chartData.reduce(
-      (value, reaction) => (reaction.value > value ? reaction.value : value),
-      0
-    );
+    const [chartData, maxValue] = getChartData(this.props.issues);
     return (
       <Graph>
         <GraphTitle>
@@ -123,20 +130,24 @@ const ReactionsGraph = class extends React.Component {
         </GraphBars>
         <GraphPaginationActions>
           {this.props.hasNext && (
-            <GraphPaginationAction
+            <Button
+              small
               disabled={this.props.fetching}
               onClick={this.props.onLoadNextPage}
+              theme={paginationButtonTheme}
             >
               Older issues
-            </GraphPaginationAction>
+            </Button>
           )}
           {this.props.hasPrevious && (
-            <GraphPaginationAction
+            <Button
+              small
               disabled={this.props.fetching}
               onClick={this.props.onLoadPreviousPage}
+              theme={paginationButtonTheme}
             >
               Newer issues
-            </GraphPaginationAction>
+            </Button>
           )}
         </GraphPaginationActions>
       </Graph>
@@ -174,7 +185,6 @@ const ReactionsGraphSmartContainer = class extends React.Component {
   };
 
   loadNextPage = cursor => {
-    console.log(cursor, this.state.cursors);
     this.setState({ cursors: [cursor, ...this.state.cursors] });
   };
 

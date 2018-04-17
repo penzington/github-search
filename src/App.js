@@ -7,7 +7,7 @@ import {
   Switch,
   Redirect
 } from "react-router-dom";
-import theme from "./theme";
+import theme from "./utils/theme";
 import Home from "./Home";
 import Login from "./Login";
 

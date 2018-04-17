@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "./assets/index.css";
+import fetchIntercept from "./utils/fetch-intercept";
+import { getAccessTokenFromURL } from "./utils/auth";
 import App from "./App";
-import fetchIntercept from "./fetch-intercept";
-import { getAccessTokenFromURL } from "./auth";
 
 const accessToken = getAccessTokenFromURL();
 fetchIntercept(accessToken);

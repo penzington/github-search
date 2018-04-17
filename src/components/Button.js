@@ -5,7 +5,7 @@ export default styled.button`
   font-family: inherit;
   font-size: inherit;
   cursor: pointer;
-  padding: 1em 2em;
+  padding: ${props => (props.small ? "0.5rem 1rem" : "1em 2em")};
   display: inline-block;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -20,5 +20,8 @@ export default styled.button`
   }
   :active {
     transform: translateY(2px);
+  }
+  :disabled {
+    border-style: dashed;
   }
 `;

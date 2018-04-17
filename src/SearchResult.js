@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { GitHubLogo } from "./components/Icons";
 
-function getAutofillText(result = {}, inputValue = "") {
+export function getAutofillText(result = {}, inputValue = "") {
   const normalizedInputValue = inputValue.trim().toLowerCase();
   if (!normalizedInputValue && !result) {
     return ["Type to ", "search..."];
@@ -83,6 +83,7 @@ export const SearchResultInput = styled.div`
   font-size: 3em;
   font-weight: bold;
   outline: 0;
+  min-height: 1em;
   color: ${props => props.theme.colors.lightBlue};
 
   @keyframes flash {

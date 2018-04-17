@@ -2,12 +2,12 @@ import React from "react";
 import styled, { css } from "styled-components";
 import media from "styled-media-query";
 import { Link, withRouter } from "react-router-dom";
+import { Connect, query } from "urql";
 import Button from "./components/Button";
 import Logo from "./components/Logo";
 import { GitHubLogo } from "./components/Icons";
-import { Connect, query } from "urql";
-import placeholderAvatarUrl from "./avatar.png";
-import { logout } from "./auth";
+import placeholderAvatarUrl from "./assets/avatar.png";
+import { logout } from "./utils/auth";
 
 const Avatar = styled.img`
   width: 8em;

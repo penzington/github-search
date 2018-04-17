@@ -22,9 +22,7 @@ const SpacedLogo = styled(Logo)`
 const Login = () => (
   <Page>
     <SpacedLogo>Who Can Do My Code Review?!</SpacedLogo>
-    <ButtonLink href={process.env.REACT_APP_LOGIN_URL}>
-      Login with GitHub
-    </ButtonLink>
+    <ButtonLink href={"/api/login"}>Login with GitHub</ButtonLink>
   </Page>
 );
 

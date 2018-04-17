@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { Connect, query } from "urql";
 import { Link, withRouter } from "react-router-dom";
 import throttle from "lodash.throttle";
-import SearchResult, { SearchResultInput } from "./SearchResult";
 import Button from "./components/Button";
+import SearchResult, { SearchResultInput } from "./SearchResult";
 
 const SearchContainer = styled.div`
   height: 100%;
@@ -47,7 +47,9 @@ const SearchResultsMeta = styled.div`
 `;
 
 const PaginationActions = styled.div`
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
   padding: 1em;
   > * + * {
     margin-left: 1em;
@@ -182,20 +184,22 @@ export const Search = class extends React.Component {
             ))}
           </SearchResults>
           <PaginationActions>
-            {this.props.hasPrevious && (
-              <Button
-                theme={paginationButtonTheme}
-                onClick={this.props.onLoadPreviousPage}
-              >
-                Wait, revert!
-              </Button>
-            )}
             {this.props.hasNext && (
               <Button
                 theme={paginationButtonTheme}
                 onClick={this.props.onLoadNextPage}
+                disabled={this.props.fetching}
               >
                 Give me more!
+              </Button>
+            )}
+            {this.props.hasPrevious && (
+              <Button
+                theme={paginationButtonTheme}
+                onClick={this.props.onLoadPreviousPage}
+                disabled={this.props.fetching}
+              >
+                Wait, revert!
               </Button>
             )}
           </PaginationActions>

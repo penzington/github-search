@@ -4,7 +4,7 @@ import media from "styled-media-query";
 import { Connect, query } from "urql";
 import { format } from "date-fns";
 import styled, { css } from "styled-components";
-import placeholderAvatarUrl from "./avatar.png";
+import placeholderAvatarUrl from "./assets/avatar.png";
 import { GitHubLogo, Back } from "./components/Icons";
 import ReactionsGraph from "./ReactionsGraph";
 

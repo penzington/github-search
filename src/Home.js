@@ -2,11 +2,11 @@ import React from "react";
 import media from "styled-media-query";
 import { Route, Switch, Redirect } from "react-router-dom";
 import styled from "styled-components";
+import ScrollToTop from "./components/ScrollToTop";
 import Sidebar from "./Sidebar";
 import Search from "./Search";
 import Profile from "./Profile";
 import Page404 from "./404";
-import ScrollToTop from "./ScrollToTop";
 
 const Layout = styled.div`
   font-size: 0.9em;
