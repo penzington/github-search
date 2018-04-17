@@ -18,8 +18,11 @@ clean:
 build: install-deps
 	yarn build
 
+test: install-deps
+	yarn test
+
 distclean: clean
 	rm -rf node_modules
 
-run-docker-fullstack:
+run-docker-fullstack: install-deps
 	docker-compose up

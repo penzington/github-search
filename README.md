@@ -19,7 +19,14 @@ The backend service exposes two endpoints - `/login` and `/callback`. To request
 The app contacts the GitHub API through the [GraphQL endpoint](https://developer.github.com/v4) directly. Several queries are used, e.g. for current user, search or specific user.
 
 ## Usage stats
-The app reports all calls to the GitHub API back the the server using the [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API). The type of GraphQL query, query variables, time and duration of the request are saved.
+The app reports all calls to the GitHub API back the the server using the [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API). The type of GraphQL query, query variables, time and duration of the request are saved. 
+
+### Notes
+This is the feature that is the most unfinished. It's mostly a sketch of what the solution could be. Some remarks here:
+- At the moment the stats are publicly available. You can use the `log/users` route (e.g. https://whocandomycode.review/api/log/users) to get the list of the users and aggregate query number and `log/users/${login}` to get the list of logs for queries done by the user.
+- The endpoints are very naive (e.g. no pagination);
+- With the current implementation, the logs are stored in memory, which causes obvious problems, e.g. they get wiped on every deployment and when now decides to restart the server container and if they run log enough they will eventually run out of memory.
+- There is no UI to view the stats.
 
 # App requirements
 The SPA requires a modern browser supporting, among others, `fetch`, `URLSearchParams` and Beacon API. In practice, it should work on all ever-green browsers in their latests versions (including Safari in the newest version 11.1). If in doubt, use the latest Chrome.
@@ -96,6 +103,10 @@ Source code for the the frontend of the app lives in `src` directory. `index.js`
 
 ## Backend
 Source code for the the frontend of the app lives in `backend/src` directory. `index.js` is the entrypoint to the app. Handlers for routes are split between handler files, and `user-register.js` bootstraps the stats database and exposes methods for saving and retrieving stats data.
+
+## Tests
+
+Project is not heavily tested yet, but there are some unit tests for the most fragile logic in the frontend. They are run using [Jest](https://facebook.github.io/jest/) testing framework, which comes bundled with CRA. You can run the tests with `make test`, they are also ran on every commit.
 
 # Deployment
 The frontend and backend components are deployed separately, as their needs for hosting are very different.
