@@ -1,11 +1,28 @@
 {
-  "name": "backend",
+  "name": "who-can-do-my-code-review-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "private": true,
+  "main": "src/index.js",
   "license": "MIT",
+  "now": {
+    "alias": "whocandomycodereview.now.sh",
+    "dotenv": ".env.production",
+    "public": true,
+    "type": "docker",
+    "name": "whocandomycodereview",
+    "scale": {
+      "bru1": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  "engines": { 
+    "node" : ">=9" 
+  },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "dependencies": {
     "axios": "^0.18.0",

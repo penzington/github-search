@@ -1,20 +1,21 @@
 {
-  "name": "whos-on-github",
-  "version": "0.1.0",
+  "name": "who-can-do-my-code-review",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "date-fns": "^2.0.0-alpha.7",
     "lodash.throttle": "^4.1.1",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
+    "prop-types": "^15.6.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
     "react-router-dom": "^4.2.2",
-    "styled-components": "^3.2.5",
+    "styled-components": "^3.2.6",
     "styled-media-query": "^2.0.2",
     "urql": "^0.2.1"
   },
   "scripts": {
     "precommit": "lint-staged",
-    "start": "react-scripts start",
+    "start": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "lint": "eslint --fix src",
@@ -32,7 +33,7 @@
     ],
     "rules": {
       "prettier/prettier": [
-        "error"
+        "warn"
       ]
     }
   },
@@ -40,12 +41,17 @@
     "src/**/*.js": [
       "yarn lint:bail",
       "yarn test:staged"
+    ],
+    "backend/src/**/*.js": [
+      "yarn lint:bail"
     ]
   },
   "proxy": {
     "/api": {
       "target": "http://localhost:3001",
-      "pathRewrite": { "^/api" : "" }
+      "pathRewrite": {
+        "^/api": ""
+      }
     }
   },
   "devDependencies": {
@@ -54,7 +60,7 @@
     "eslint-plugin-prettier": "^2.6.0",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.4",
-    "prettier": "^1.11.1",
+    "prettier": "^1.12.1",
     "react-scripts": "1.1.4"
   }
 }

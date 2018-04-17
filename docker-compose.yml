@@ -1,0 +1,16 @@
+version: '3'
+services:
+  frontend:
+    build: .
+    ports:
+     - "3000:3000"
+     - "35729:35729"
+    volumes:
+      - ${PWD}/src:/usr/src/app/src
+  backend:
+    build: backend
+    command: yarn dev
+    volumes:
+      - ${PWD}/backend/src:/usr/src/app/src
+    ports:
+     - "3001:3001"
