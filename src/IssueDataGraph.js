@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Connect, query } from "urql";
 import Button from "./components/Button";
 
+const GRAPH_HEIGHT = 300;
+
 const Graph = styled.div`
   padding: 1rem;
   flex: 1;
@@ -11,7 +13,7 @@ const Graph = styled.div`
 const GraphBars = styled.div`
   padding-top: 3rem;
   margin-bottom: 4rem;
-  height: 300px;
+  height: ${GRAPH_HEIGHT}px;
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
@@ -28,6 +30,18 @@ const GraphTitle = styled.div`
 const GraphExplanation = styled.div`
   color: ${props => props.theme.colors.mutedTextColor};
   min-height: 2em;
+`;
+
+const GraphEmptyState = styled.div`
+  color: ${props => props.theme.colors.mutedTextColor};
+  height: ${GRAPH_HEIGHT}px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 1.5em;
 `;
 
 const GraphPaginationActions = styled.div`
@@ -102,24 +116,28 @@ const IssueDataGraph = class extends React.Component {
           <span>{this.props.title}</span>{" "}
           {this.props.fetching && <small>Loading...</small>}
         </GraphTitle>
-        <GraphBars>
-          {chartData.map(item => (
-            <GraphBar
-              loaded={this.props.loaded}
-              key={item.name}
-              barCount={chartData.length}
-              maxValue={maxValue}
-              {...item}
-            >
-              {this.props.showFloatingLabel && (
-                <GraphBarFloatingLabel>{item.name}</GraphBarFloatingLabel>
-              )}
-            </GraphBar>
-          ))}
-        </GraphBars>
+        {(!this.props.loaded || !!maxValue) && (
+          <GraphBars>
+            {chartData.map(item => (
+              <GraphBar
+                loaded={this.props.loaded}
+                key={item.name}
+                barCount={chartData.length}
+                maxValue={maxValue}
+                {...item}
+              >
+                {this.props.showFloatingLabel && (
+                  <GraphBarFloatingLabel>{item.name}</GraphBarFloatingLabel>
+                )}
+              </GraphBar>
+            ))}
+          </GraphBars>
+        )}
+        {this.props.loaded &&
+          !maxValue && <GraphEmptyState>No data found</GraphEmptyState>}
         <GraphExplanation>{this.props.explanation}</GraphExplanation>
         <GraphPaginationActions>
-          {this.props.hasNext && (
+          {this.props.hasNext ? (
             <Button
               small
               disabled={this.props.fetching}
@@ -128,8 +146,10 @@ const IssueDataGraph = class extends React.Component {
             >
               Older issues
             </Button>
+          ) : (
+            <span> </span>
           )}
-          {this.props.hasPrevious && (
+          {this.props.hasPrevious ? (
             <Button
               small
               disabled={this.props.fetching}
@@ -138,6 +158,8 @@ const IssueDataGraph = class extends React.Component {
             >
               Newer issues
             </Button>
+          ) : (
+            <span> </span>
           )}
         </GraphPaginationActions>
       </Graph>
